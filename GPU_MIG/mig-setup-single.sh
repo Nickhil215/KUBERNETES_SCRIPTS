@@ -20,7 +20,7 @@ echo "🚀 Installing NVIDIA GPU Operator with MIG single strategy..."
 helm install --wait --generate-name \
     -n "$NAMESPACE" --create-namespace \
     nvidia/gpu-operator \
-    --version="$GPU_OPERATOR_VERSION" \
+    # --version="$GPU_OPERATOR_VERSION" \
     --set mig.strategy=single \
     --set migManager.env[0].name=WITH_REBOOT \
     --set-string migManager.env[0].value=true \
