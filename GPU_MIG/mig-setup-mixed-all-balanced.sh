@@ -16,15 +16,11 @@ if [ -z "$NODE_NAME" ] || [ -z "$MIG_PROFILE" ]; then
   exit 1
 fi
 
-echo "🚀 Installing NVIDIA GPU Operator with MIG mixed strategy..."
-helm install --wait --generate-name \
-    -n "$NAMESPACE" --create-namespace \
+echo "🚀 Installing NVIDIA GPU Operator with MIG Mixed strategy..."
+  helm install --wait --generate-name \
+    -n gpu-operator --create-namespace \
     nvidia/gpu-operator \
-    # --version="$GPU_OPERATOR_VERSION" \
-    --set mig.strategy=mixed \
-    --set migManager.env[0].name=WITH_REBOOT \
-    --set-string migManager.env[0].value=true \
-    --set driver.enabled=false
+    --set mig.strategy=mixed
 
 echo "⏳ Waiting for pods to initialize..."
 sleep 60  # Adjust as needed for your environment

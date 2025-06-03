@@ -32,17 +32,12 @@ fi
 echo "📦 Applying custom MIG config from '$CUSTOM_CONFIG_FILE'..."
 kubectl apply -n "$NAMESPACE" -f "$CUSTOM_CONFIG_FILE"
 
-echo "🚀 Installing GPU Operator with custom MIG config '$CUSTOM_CONFIG_NAME'..."
-helm install --wait --generate-name \
-    -n "$NAMESPACE" --create-namespace \
+echo "🚀 Installing NVIDIA GPU Operator with MIG Mixed strategy..."
+  helm install --wait --generate-name \
+    -n gpu-operator --create-namespace \
     nvidia/gpu-operator \
-    --version="$GPU_OPERATOR_VERSION" \
-    --set mig.strategy=mixed \
-    --set migManager.config.name="$CUSTOM_CONFIG_NAME" \
-    --set migManager.config.create=false \
-    --set migManager.env[0].name=WITH_REBOOT \
-    --set-string migManager.env[0].value=true \
-    --set driver.enabled=false
+    --set mig.strategy=mixed
+
 
 echo "🧩 Patching cluster policy to mixed strategy"
 kubectl patch clusterpolicies.nvidia.com/cluster-policy \

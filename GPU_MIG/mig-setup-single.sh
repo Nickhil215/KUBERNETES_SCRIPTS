@@ -20,14 +20,10 @@ if [ -z "$NODE_NAME" ] || [ -z "$MIG_PROFILE" ]; then
 fi
 
 echo "🚀 Installing NVIDIA GPU Operator with MIG single strategy..."
-helm install --wait --generate-name \
-    -n "$NAMESPACE" --create-namespace \
+  helm install --wait --generate-name \
+    -n gpu-operator --create-namespace \
     nvidia/gpu-operator \
-    # --version="$GPU_OPERATOR_VERSION" \
-    --set mig.strategy=single \
-    --set migManager.env[0].name=WITH_REBOOT \
-    --set-string migManager.env[0].value=true \
-    --set driver.enabled=false
+    --set mig.strategy=single
 
 echo "⏳ Waiting for pods to spin up..."
 sleep 60  # adjust based on infra speed
