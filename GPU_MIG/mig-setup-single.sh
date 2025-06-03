@@ -9,10 +9,13 @@ NAMESPACE="gpu-operator"
 HELM_RELEASE_NAME="gpu-operator"
 GPU_OPERATOR_VERSION="v25.3.0"
 NODE_NAME="$1"
-MIG_PROFILE="all-1g.10gb"
+# MIG_PROFILE="all-1g.10gb"
+MIG_PROFILE="$2"
 
-if [ -z "$NODE_NAME" ]; then
-  echo "Usage: $0 <node-name>"
+
+if [ -z "$NODE_NAME" ] || [ -z "$MIG_PROFILE" ]; then
+  echo "Usage: $0 <node-name> <mig-profile>"
+  echo "Example: $0 my-gpu-node all-1g.10gb"
   exit 1
 fi
 
