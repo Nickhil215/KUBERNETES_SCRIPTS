@@ -69,5 +69,7 @@ echo "🎉 MIG Single Strategy setup complete!"
 
 # EXECUTION STEPS 
 # chmod +x mig-setup-single.sh
-# ./mig-setup-single.sh <your-node-name>
+# ./mig-setup-single.sh <your-node-name> <mig-profile>
+
+# Example: ./mig-setup-single.sh gpu-node-01 all-1g.10gb
 
