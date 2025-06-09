@@ -44,7 +44,7 @@ helm repo add nvidia https://nvidia.github.io/gpu-operator
 helm repo update
 
 echo "===== Step 6: Deploying NVIDIA GPU Operator via Helm ====="
-helm install --wait --generate-name nvidia/gpu-operator
+helm install --wait --generate-name -n gpu-operator --create-namespace nvidia/gpu-operator 
 
 echo "===== Step 7: Verifying NVIDIA Pods ====="
 kubectl get pods -A | grep nvidia || echo "No NVIDIA pods found yet — they might still be initializing."
