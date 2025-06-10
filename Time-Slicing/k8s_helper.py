@@ -7,7 +7,7 @@ def apply_configmap(yaml_dict: dict, namespace="gpu-operator"):
     with tempfile.NamedTemporaryFile("w", delete=False, suffix=".yaml") as f:
         yaml.dump(yaml_dict, f)
         f.flush()
-        
+        print(f.name)
         subprocess.run(["kubectl", "apply", "-n", namespace, "-f", f.name], check=True)
 
 
