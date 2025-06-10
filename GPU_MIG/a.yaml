@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: h100-mig-time-slicing-config # You can choose a descriptive name
+  namespace: gpu-operator # Ensure this is the namespace where the GPU operator is installed
+data:
+  h100-mig-mixed-sliced: |- # This is the key you will use to label your nodes
+    version: v1
+    flags:
+      migStrategy: mixed # Set to 'mixed' to match your node's MIG configuration [3, 4]
+      sharing:
+        timeSlicing:
+          # Setting renameByDefault to false means the resource names (nvidia.com/mig-*)
+          # are not changed, but the product label gets a -SHARED suffix [5, 6]
+          renameByDefault: false
+          # Set failRequestsGreaterThanOne to true if you want to prevent pods
+          # from requesting more than 1 replica of a time-sliced resource [6, 7]
+          failRequestsGreaterThanOne: false
+          resources:
+            # Specify the MIG device resource types and the number of replicas for each [7]
+            - name: nvidia.com/mig-1g.10gb
+              replicas: 4 # Example: Make 4 time-sliced replicas of each 1g.10gb instance
+            - name: nvidia.com/mig-2g.20gb
+              replicas: 3 # Example: Make 3 time-sliced replicas of each 2g.20gb instance
+            - name: nvidia.com/mig-3g.40gb
+              replicas: 2 # Example: Make 2 time-sliced replicas of each 3g.40gb instance
+            # You could also include nvidia.com/gpu here if you have non-MIG
+            # capacity you also want to time-slice, but it's less common
+            # when fully using a mixed MIG strategy.
+            # - name: nvidia.com/gpu
+            #   replicas: 1 # Or some other number if there's full GPU access available alongside MIG
