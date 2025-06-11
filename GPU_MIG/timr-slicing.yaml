@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: time-slicing-config-h100
+  namespace: gpu-operator
+data:
+  h100-80gb-mig: |-
+    version: v1
+    flags:
+      migStrategy: mixed
+    sharing:
+      timeSlicing:
+        resources:
+        - name: nvidia.com/mig-1g.10gb
+          replicas: 4
+        - name: nvidia.com/mig-2g.20gb
+          replicas: 2
+        - name: nvidia.com/mig-3g.40gb
+          replicas: 2
