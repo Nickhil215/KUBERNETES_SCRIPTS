@@ -75,7 +75,7 @@ echo "🔍 Node labels after MIG setup:"
 kubectl get node "$NODE_NAME" -o=jsonpath='{.metadata.labels}' | jq .
 
 echo "🧠 Validating MIG profiles via nvidia-smi:"
-kubectl exec -it -n "$NAMESPACE" ds/nvidia-driver-daemonset -- nvidia-smi -L
+nvidia-smi -L
 
 echo "🎉 MIG Mixed Strategy setup complete and validated!"
 
