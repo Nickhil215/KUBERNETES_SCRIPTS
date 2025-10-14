@@ -23,6 +23,8 @@ elif echo "$GPU_INFO" | grep -iq "A16"; then
     DRIVER_VERSION="535-server"
 elif echo "$GPU_INFO" | grep -iq "L40"; then
     DRIVER_VERSION="550-server"
+elif echo "$GPU_INFO" | grep -iq "L4"; then
+    DRIVER_VERSION="550-server"
 fi
 
 echo "📦 Installing NVIDIA driver and utils: $DRIVER_VERSION"
