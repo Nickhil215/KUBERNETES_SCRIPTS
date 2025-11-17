@@ -467,7 +467,7 @@ echo "[Success] Package list updated."
 
 echo "====== Step 3: Installing Required Packages ======"
 echo "Installing 'ca-certificates', 'curl', 'gnupg', and 'lsb-release'..."
-apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release nfs-common jq gpg
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release nfs-common jq gpg conntrack
 echo "[Success] Required packages installed."
 
 SERVICE_FILE="/lib/systemd/system/containerd.service"
