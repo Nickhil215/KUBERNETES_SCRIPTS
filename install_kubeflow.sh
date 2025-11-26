@@ -4,7 +4,7 @@ set -euo pipefail
 
 # =============== CONFIG ===============
 JUJU_CHANNEL="3.6/stable"
-KUBEFLOW_CHANNEL="1.9/stable"
+KUBEFLOW_CHANNEL="1.10/stable"
 JUJU_CLOUD_NAME="myk8scloud"
 JUJU_CONTROLLER_NAME="uk8sx"
 JUJU_MODEL_NAME="kubeflow"
