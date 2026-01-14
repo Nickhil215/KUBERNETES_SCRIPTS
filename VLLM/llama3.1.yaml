@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hf-token-secret
+  namespace: default
+type: Opaque
+stringData:
+  # Replace with your Hugging Face token
+  token: "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"
+---
+---
+# ================================
+# vLLM Deployment (Llama-3.1-8B)
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-llama3-1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-llama3-1
+  template:
+    metadata:
+      labels:
+        app: vllm-llama3-1
+    spec:
+      restartPolicy: Always
+      runtimeClassName: nvidia
+      containers:
+        - name: vllm
+          # image: vllm/vllm-openai:v0.6.4
+          image: vllm/vllm-openai:v0.10.2
+          imagePullPolicy: IfNotPresent
+
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              vllm serve meta-llama/Llama-3.1-8B \
+                --host 0.0.0.0 \
+                --port 8000 \
+                --trust-remote-code \
+                --enable-chunked-prefill \
+                --max-num-batched-tokens 1024
+
+          env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token-secret
+                  key: token
+
+          ports:
+            - containerPort: 8000
+
+          resources:
+            requests:
+              cpu: "4"
+              memory: 12Gi
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "12"
+              memory: 32Gi
+              nvidia.com/gpu: "1"
+
+          volumeMounts:
+            - name: hf-cache
+              mountPath: /root/.cache/huggingface
+            - name: shm
+              mountPath: /dev/shm
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 90
+            periodSeconds: 15
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 90
+            periodSeconds: 10
+
+      volumes:
+        - name: hf-cache
+          persistentVolumeClaim:
+            claimName: vllm-model-cache
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 8Gi
+
+---
+# ================================
+# Service (LoadBalancer)
+# ================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-llama3-1
+  namespace: default
+  labels:
+    app: vllm-llama3-1
+  annotations:
+    metallb.universe.tf/ip-allocated-from-pool: metallb
+spec:
+  type: LoadBalancer
+  selector:
+    app: vllm-llama3-1
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+      nodePort: 30081
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  allocateLoadBalancerNodePorts: true
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
