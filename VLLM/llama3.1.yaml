@@ -8,6 +8,18 @@ stringData:
   # Replace with your Hugging Face token
   token: "TOKEN"
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-model-cache
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 250Gi        # adjust based on model size/cache needs
+  volumeMode: Filesystem
 ---
 # ================================
 # vLLM Deployment (Llama-3.1-8B)
