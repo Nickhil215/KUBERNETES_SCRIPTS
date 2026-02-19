@@ -17,8 +17,8 @@ echo "   Kubeflow Bundle Deployment Script"
 echo "============================================"
 
 # ---- Step 1: Install git-lfs ----
-echo "[1/9] Installing git-lfs..."
-apt install git-lfs -y
+echo "[1/9] Installing git-lfs and unzip..."
+apt install git-lfs unzip -y
 
 # ---- Step 2: Clone the repo ----
 echo "[2/9] Cloning Juju bundle repo..."
