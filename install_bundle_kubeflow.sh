@@ -7,8 +7,8 @@ JUJU_CLOUD_NAME="myk8scloud"
 JUJU_CONTROLLER_NAME="uk8sx"
 JUJU_MODEL_NAME="kubeflow"
 K8S_CLUSTER_NAME="kubernetes"
-BUNDLE_REPO="https://github.com/deepaksri0147/juju-bundle.git"
-BUNDLE_DIR="$HOME/juju-bundle"
+# BUNDLE_REPO="https://github.com/deepaksri0147/juju-bundle.git"  # No longer needed
+BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/juju-bundle"
 CHARM_DIR="$BUNDLE_DIR/juju-charm-files"
 # ======================================
 
@@ -17,23 +17,23 @@ echo "   Kubeflow Bundle Deployment Script"
 echo "============================================"
 
 # ---- Step 1: Install git-lfs ----
-echo "[1/9] Installing git-lfs and unzip..."
-apt install git-lfs unzip -y
+# echo "[1/9] Installing git-lfs..."
+# apt install git-lfs -y                          # Not needed, no LFS pull required
 
 # ---- Step 2: Clone the repo ----
-echo "[2/9] Cloning Juju bundle repo..."
-if [ -d "$BUNDLE_DIR" ]; then
-  echo "Directory $BUNDLE_DIR already exists, skipping clone..."
-else
-  git clone "$BUNDLE_REPO" "$BUNDLE_DIR"
-fi
+# echo "[2/9] Cloning Juju bundle repo..."        # Not needed, files are local
+# if [ -d "$BUNDLE_DIR" ]; then
+#   echo "Directory $BUNDLE_DIR already exists, skipping clone..."
+# else
+#   git clone "$BUNDLE_REPO" "$BUNDLE_DIR"
+# fi
 
 cd "$BUNDLE_DIR"
 
 # ---- Step 3: Pull LFS files ----
-echo "[3/9] Initializing Git LFS and pulling files..."
-git lfs install
-git lfs pull
+# echo "[3/9] Initializing Git LFS and pulling files..."  # Not needed, files are local
+# git lfs install
+# git lfs pull
 
 # ---- Step 4: Unzip charm files ----
 echo "[4/9] Unzipping juju-charm-files.zip..."
