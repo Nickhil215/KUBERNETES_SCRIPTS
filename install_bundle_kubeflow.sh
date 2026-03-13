@@ -77,6 +77,10 @@ echo "[+] Adjusting sysctl inotify limits..."
 sudo sysctl fs.inotify.max_user_instances=1280
 sudo sysctl fs.inotify.max_user_watches=655360
 
+#----Docker HUB Secrets---
+kubectl apply -f dockerhub-secret-kubflow.yaml
+
+
 # ---- Deploy bundle ----
 echo "[+] Deploying Kubeflow bundle..."
 cd "$CHARM_DIR"
