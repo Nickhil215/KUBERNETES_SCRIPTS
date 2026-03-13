@@ -59,6 +59,7 @@ echo "Deploying COS Lite"
 echo "=========================================="
 
 #juju deploy cos-lite -m $CONTROLLER:$COS_MODEL --channel=latest/stable --trust 2>/dev/null || echo "COS already deployed"
+cd "$CHARM_DIR"
 juju deploy ./bundle.yaml --trust
 juju wait-for application prometheus -m $CONTROLLER:$COS_MODEL --timeout 10m
 
