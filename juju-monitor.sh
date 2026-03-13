@@ -6,6 +6,34 @@ CONTROLLER="uk8sx"
 COS_MODEL="monitoring"
 KF_MODEL="kubeflow"
 USER="admin"
+BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/juju-bundle"
+CHARM_DIR="$BUNDLE_DIR/kubeflow-monitor"
+
+echo "============================================"
+echo "   Monitoring Bundle Deployment Script"
+echo "============================================"
+
+
+cd "$BUNDLE_DIR"
+
+# ---- Step 3: Pull LFS files ----
+# echo "[3/9] Initializing Git LFS and pulling files..."  # Not needed, files are local
+# git lfs install
+# git lfs pull
+
+# ---- Step 4: Unzip charm files ----
+echo "[4/9] Unzipping kubeflow-monitor.zip..."
+if [ -d "$CHARM_DIR" ]; then
+  echo "Charm files already extracted, skipping unzip..."
+else
+  unzip kubeflow-monitor.zip
+fi
+
+ls -lh kubeflow-monitor.zip
+echo "Charm files ready:"
+ls "$CHARM_DIR"
+
+
 
 echo "=========================================="
 echo "Switching to controller: $CONTROLLER"
@@ -18,6 +46,11 @@ echo "Creating COS model (if not exists)"
 echo "=========================================="
 
 juju add-model $COS_MODEL 2>/dev/null || echo "Model exists"
+
+echo "=========================================="
+echo "Docker hub secret"
+echo "=========================================="
+kubectl apply -f docker-secret-monitor.yaml
 
 echo "=========================================="
 echo "Deploying COS Lite"
