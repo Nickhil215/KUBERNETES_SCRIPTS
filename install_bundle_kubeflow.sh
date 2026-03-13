@@ -10,6 +10,7 @@ K8S_CLUSTER_NAME="kubernetes"
 # BUNDLE_REPO="https://github.com/deepaksri0147/juju-bundle.git"  # No longer needed
 BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/juju-bundle"
 CHARM_DIR="$BUNDLE_DIR/juju-charm-files"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ======================================
 
 echo "============================================"
@@ -78,7 +79,14 @@ sudo sysctl fs.inotify.max_user_instances=1280
 sudo sysctl fs.inotify.max_user_watches=655360
 
 #----Docker HUB Secrets---
-kubectl apply -f dockerhub-secret-kubflow.yaml
+kubectl apply -f "$SCRIPT_DIR/dockerhub-secret-kubflow.yaml"
+
+
+#----giving prmissions
+chmod 755 /home/ubuntu
+chmod 755 /home/ubuntu/KUBERNETES_SCRIPTS
+chmod 755 /home/ubuntu/KUBERNETES_SCRIPTS/juju-bundle
+chmod 755 /home/ubuntu/KUBERNETES_SCRIPTS/juju-bundle/juju-charm-files
 
 
 # ---- Deploy bundle ----
