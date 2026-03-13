@@ -8,6 +8,7 @@ KF_MODEL="kubeflow"
 USER="admin"
 BUNDLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/juju-bundle"
 CHARM_DIR="$BUNDLE_DIR/kubeflow-monitor"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "============================================"
 echo "   Monitoring Bundle Deployment Script"
@@ -50,7 +51,8 @@ juju add-model $COS_MODEL 2>/dev/null || echo "Model exists"
 echo "=========================================="
 echo "Docker hub secret"
 echo "=========================================="
-kubectl apply -f docker-secret-monitor.yaml
+kubectl apply -f "$SCRIPT_DIR/docker-secret-monitor.yaml"
+
 
 echo "=========================================="
 echo "Deploying COS Lite"
